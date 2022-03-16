@@ -163,3 +163,28 @@ class Mnist(paddle.nn.Layer):
 
 mnist_2 = Mnist()
 
+#%%
+
+# 使用GPU训练
+# paddle.set_device('gpu')
+
+# 模型封装
+
+## 场景1：动态图模式
+## 1.1 为模型预测部署场景进行模型训练
+## 需要添加input和label数据描述，否则会导致使用model.save(training=False)保存的预测模型在使用时出错
+inputs = paddle.static.InputSpec([-1, 1, 28, 28], dtype='float32', name='input')
+label = paddle.static.InputSpec([-1, 1], dtype='int8', name='label')
+model = paddle.Model(mnist, inputs, label)
+
+## 1.2 面向实验而进行的模型训练
+## 可以不传递input和label信息
+# model = paddle.Model(mnist)
+
+## 场景2：静态图模式
+# paddle.enable_static()
+# paddle.set_device('gpu')
+# input = paddle.static.InputSpec([None, 1, 28, 28], dtype='float32')
+# label = paddle.static.InputSpec([None, 1], dtype='int8')
+# model = paddle.Model(mnist, input, label)
+
