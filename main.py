@@ -196,3 +196,10 @@ model.summary((1, 28, 28))
 
 paddle.summary(mnist, (1, 28, 28))
 
+#%%
+
+# 为模型训练做准备，设置优化器，损失函数和精度计算方式
+model.prepare(paddle.optimizer.Adam(parameters=model.parameters()), 
+              paddle.nn.CrossEntropyLoss(),
+              paddle.metric.Accuracy())
+
