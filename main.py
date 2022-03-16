@@ -348,3 +348,7 @@ class Precision(Metric):
         """
         return self._name
 
+#%%
+
+result = model.evaluate(val_dataset, verbose=1)
+
