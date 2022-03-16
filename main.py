@@ -20,3 +20,17 @@ print(c)
 d = paddle.matmul(a, b)
 print(d)
 
+#%%
+
+a = paddle.to_tensor(np.array([1, 2, 3]))
+b = paddle.to_tensor(np.array([4, 5, 6]))
+
+for i in range(10):
+    r = paddle.rand([1,])
+    if r > 0.5:
+        c = paddle.pow(a, i) + b
+        print("{} +> {}".format(i, c.numpy()))
+    else:
+        c = paddle.pow(a, i) - b
+        print("{} -> {}".format(i, c.numpy()))
+
