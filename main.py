@@ -352,3 +352,7 @@ class Precision(Metric):
 
 result = model.evaluate(val_dataset, verbose=1)
 
+#%%
+
+pred_result = model.predict(val_dataset)
+
