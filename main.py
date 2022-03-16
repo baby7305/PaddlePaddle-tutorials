@@ -87,3 +87,44 @@ transform = Compose([ColorJitter(), Resize(size=100)])
 # 通过transform参数传递定义好的数据增项方法即可完成对自带数据集的应用
 train_dataset_3 = vision.datasets.MNIST(mode='train', transform=transform)
 
+#%%
+
+from paddle.io import Dataset
+
+
+class MyDataset(Dataset):
+    def __init__(self, mode='train'):
+        super(MyDataset, self).__init__()
+
+        if mode == 'train':
+            self.data = [
+                ['traindata1', 'label1'],
+                ['traindata2', 'label2'],
+                ['traindata3', 'label3'],
+                ['traindata4', 'label4'],
+            ]
+        else:
+            self.data = [
+                ['testdata1', 'label1'],
+                ['testdata2', 'label2'],
+                ['testdata3', 'label3'],
+                ['testdata4', 'label4'],
+            ]
+
+        # 定义要使用的数据预处理方法，针对图片的操作
+        self.transform = Compose([ColorJitter(), Resize(size=100)])
+    
+    def __getitem__(self, index):
+        data = self.data[index][0]
+
+        # 在这里对训练数据进行应用
+        # 这里只是一个示例，测试时需要将数据集更换为图片数据进行测试
+        data = self.transform(data)
+
+        label = self.data[index][1]
+
+        return data, label
+
+    def __len__(self):
+        return len(self.data)
+
