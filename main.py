@@ -203,3 +203,11 @@ model.prepare(paddle.optimizer.Adam(parameters=model.parameters()),
               paddle.nn.CrossEntropyLoss(),
               paddle.metric.Accuracy())
 
+#%%
+
+# 启动模型训练，指定训练数据集，设置训练轮次，设置每次数据集计算的批次大小，设置日志格式
+model.fit(train_dataset, 
+          epochs=5, 
+          batch_size=64,
+          verbose=1)
+
