@@ -33,3 +33,18 @@ print("b before optimize: {}".format(b_before_opt))
 mse_loss = paddle.nn.MSELoss()
 sgd_optimizer = paddle.optimizer.SGD(learning_rate=0.001, parameters = linear.parameters())
 
+#%%
+
+total_epoch = 5000
+for i in range(total_epoch):
+    y_predict = linear(x_data)
+    loss = mse_loss(y_predict, y_data)
+    loss.backward()
+    sgd_optimizer.step()
+    sgd_optimizer.clear_grad()
+    
+    if i%1000 == 0:
+        print("epoch {} loss {}".format(i, loss.numpy()))
+        
+print("finished training， loss {}".format(loss.numpy()))
+
