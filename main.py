@@ -254,3 +254,16 @@ class SelfDefineLoss(paddle.nn.Layer):
         # output = xxxxx
         # return output
 
+#%%
+
+class SoftmaxWithCrossEntropy(paddle.nn.Layer):
+    def __init__(self):
+        super(SoftmaxWithCrossEntropy, self).__init__()
+
+    def forward(self, input, label):
+        loss = F.softmax_with_cross_entropy(input, 
+                                            label, 
+                                            return_softmax=False,
+                                            axis=1)
+        return paddle.mean(loss)
+
