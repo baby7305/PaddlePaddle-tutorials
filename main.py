@@ -77,3 +77,13 @@ print('=============evaluation dataset=============')
 for data, label in val_dataset_2:
     print(data, label)
 
+#%%
+
+from paddle.vision.transforms import Compose, Resize, ColorJitter
+
+# 定义想要使用那些数据增强方式，这里用到了随机调整亮度、对比度和饱和度，改变图片大小
+transform = Compose([ColorJitter(), Resize(size=100)])
+
+# 通过transform参数传递定义好的数据增项方法即可完成对自带数据集的应用
+train_dataset_3 = vision.datasets.MNIST(mode='train', transform=transform)
+
