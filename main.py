@@ -34,3 +34,24 @@ for i in range(10):
         c = paddle.pow(a, i) - b
         print("{} -> {}".format(i, c.numpy()))
 
+#%%
+
+class MyModel(paddle.nn.Layer):
+    def __init__(self, input_size, hidden_size):
+        super(MyModel, self).__init__()
+        self.linear1 = paddle.nn.Linear(input_size, hidden_size)
+        self.linear2 = paddle.nn.Linear(hidden_size, hidden_size)
+        self.linear3 = paddle.nn.Linear(hidden_size, 1)
+
+    def forward(self, inputs):
+        x = self.linear1(inputs)
+        x = F.relu(x)
+
+        if paddle.rand([1,]) > 0.5: 
+            x = self.linear2(x)
+            x = F.relu(x)
+
+        x = self.linear3(x)
+        
+        return x     
+
