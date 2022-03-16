@@ -188,3 +188,11 @@ model = paddle.Model(mnist, inputs, label)
 # label = paddle.static.InputSpec([None, 1], dtype='int8')
 # model = paddle.Model(mnist, input, label)
 
+#%%
+
+model.summary((1, 28, 28))
+
+#%%
+
+paddle.summary(mnist, (1, 28, 28))
+
