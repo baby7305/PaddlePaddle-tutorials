@@ -128,3 +128,14 @@ class MyDataset(Dataset):
     def __len__(self):
         return len(self.data)
 
+#%%
+
+# Sequential形式组网
+mnist = paddle.nn.Sequential(
+    paddle.nn.Flatten(),
+    paddle.nn.Linear(784, 512),
+    paddle.nn.ReLU(),
+    paddle.nn.Dropout(0.2),
+    paddle.nn.Linear(512, 10)
+)
+
