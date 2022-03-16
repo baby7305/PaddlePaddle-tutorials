@@ -28,3 +28,8 @@ b_before_opt = linear.bias.numpy().item()
 print("w before optimize: {}".format(w_before_opt))
 print("b before optimize: {}".format(b_before_opt))
 
+#%%
+
+mse_loss = paddle.nn.MSELoss()
+sgd_optimizer = paddle.optimizer.SGD(learning_rate=0.001, parameters = linear.parameters())
+
