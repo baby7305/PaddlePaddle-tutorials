@@ -55,3 +55,30 @@ class MyModel(paddle.nn.Layer):
         
         return x     
 
+#%%
+
+total_data, batch_size, input_size, hidden_size = 1000, 64, 128, 256
+
+x_data = np.random.randn(total_data, input_size).astype(np.float32)
+y_data = np.random.randn(total_data, 1).astype(np.float32)
+
+model = MyModel(input_size, hidden_size)
+
+loss_fn = paddle.nn.MSELoss(reduction='mean')
+optimizer = paddle.optimizer.SGD(learning_rate=0.01, 
+                                 parameters=model.parameters())
+
+for t in range(200 * (total_data // batch_size)):
+    idx = np.random.choice(total_data, batch_size, replace=False)
+    x = paddle.to_tensor(x_data[idx,:])
+    y = paddle.to_tensor(y_data[idx,:])
+    y_pred = model(x)
+
+    loss = loss_fn(y_pred, y)
+    if t % 200 == 0:
+        print(t, loss.numpy())
+
+    loss.backward()
+    optimizer.step()
+    optimizer.clear_grad()
+
