@@ -267,3 +267,84 @@ class SoftmaxWithCrossEntropy(paddle.nn.Layer):
                                             axis=1)
         return paddle.mean(loss)
 
+#%%
+
+from paddle.metric import Metric
+
+
+class Precision(Metric):
+    """
+    Precision (also called positive predictive value) is the fraction of
+    relevant instances among the retrieved instances. Refer to
+    https://en.wikipedia.org/wiki/Evaluation_of_binary_classifiers
+
+    Noted that this class manages the precision score only for binary
+    classification task.
+    
+    ......
+
+    """
+
+    def __init__(self, name='precision', *args, **kwargs):
+        super(Precision, self).__init__(*args, **kwargs)
+        self.tp = 0  # true positive
+        self.fp = 0  # false positive
+        self._name = name
+
+    def update(self, preds, labels):
+        """
+        Update the states based on the current mini-batch prediction results.
+
+        Args:
+            preds (numpy.ndarray): The prediction result, usually the output
+                of two-class sigmoid function. It should be a vector (column
+                vector or row vector) with data type: 'float64' or 'float32'.
+            labels (numpy.ndarray): The ground truth (labels),
+                the shape should keep the same as preds.
+                The data type is 'int32' or 'int64'.
+        """
+        if isinstance(preds, paddle.Tensor):
+            preds = preds.numpy()
+        elif not _is_numpy_(preds):
+            raise ValueError("The 'preds' must be a numpy ndarray or Tensor.")
+
+        if isinstance(labels, paddle.Tensor):
+            labels = labels.numpy()
+        elif not _is_numpy_(labels):
+            raise ValueError("The 'labels' must be a numpy ndarray or Tensor.")
+
+        sample_num = labels.shape[0]
+        preds = np.floor(preds + 0.5).astype("int32")
+
+        for i in range(sample_num):
+            pred = preds[i]
+            label = labels[i]
+            if pred == 1:
+                if pred == label:
+                    self.tp += 1
+                else:
+                    self.fp += 1
+
+    def reset(self):
+        """
+        Resets all of the metric state.
+        """
+        self.tp = 0
+        self.fp = 0
+
+    def accumulate(self):
+        """
+        Calculate the final precision.
+
+        Returns:
+            A scaler float: results of the calculated precision.
+        """
+        ap = self.tp + self.fp
+        return float(self.tp) / ap if ap != 0 else .0
+
+    def name(self):
+        """
+        Returns metric name
+        """
+        return self._name
+
