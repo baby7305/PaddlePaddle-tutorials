@@ -82,3 +82,21 @@ for t in range(200 * (total_data // batch_size)):
     optimizer.step()
     optimizer.clear_grad()
 
+#%%
+
+inputs = paddle.rand((256, 64))
+
+linear = paddle.nn.Linear(64, 8, bias_attr=False)
+loss_fn = paddle.nn.MSELoss()
+optimizer = paddle.optimizer.Adam(0.01, parameters=linear.parameters())
+
+for i in range(10):
+    hidden = linear(inputs)
+    # weight from input to hidden is shared with the linear mapping from hidden to output
+    outputs = paddle.matmul(hidden, linear.weight, transpose_y=True) 
+    loss = loss_fn(outputs, inputs)
+    loss.backward()
+    print("step: {}, loss: {}".format(i, loss.numpy()))
+    optimizer.step()
+    optimizer.clear_grad()
+
