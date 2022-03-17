@@ -190,3 +190,14 @@ for i in range(INFER_BATCH_SIZE):
 mean_loss = sum_cost / INFER_BATCH_SIZE
 print("Mean loss is:", mean_loss.numpy())
 
+#%%
+
+def plot_pred_ground(pred, ground):
+    plt.figure()   
+    plt.title("Predication v.s. Ground truth", fontsize=24)
+    plt.xlabel("ground truth price(unit:$1000)", fontsize=14)
+    plt.ylabel("predict price", fontsize=14)
+    plt.scatter(ground, pred, alpha=0.5)  #  scatter:散点图,alpha:"透明度"
+    plt.plot(ground, ground, c='red')
+    plt.show()
+
