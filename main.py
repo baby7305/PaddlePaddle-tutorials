@@ -27,3 +27,15 @@ feature_num = len(feature_names)
 # 将原始数据进行Reshape，变成[N, 14]这样的形状
 housing_data = housing_data.reshape([housing_data.shape[0] // feature_num, feature_num])
 
+#%%
+
+# 画图看特征间的关系,主要是变量两两之间的关系（线性或非线性，有无明显较为相关关系）
+features_np = np.array([x[:13] for x in housing_data], np.float32)
+labels_np = np.array([x[-1] for x in housing_data], np.float32)
+# data_np = np.c_[features_np, labels_np]
+df = pd.DataFrame(housing_data, columns=feature_names)
+matplotlib.use('TkAgg')
+%matplotlib inline
+sns.pairplot(df.dropna(), y_vars=feature_names[-1], x_vars=feature_names[::-1], diag_kind='kde')
+plt.show()
+
