@@ -48,3 +48,7 @@ corr_data = np.asarray(corr_data).reshape(1, 14)
 ax = sns.heatmap(corr_data, cbar=True, annot=True)
 plt.show()
 
+#%%
+
+sns.boxplot(data=df.iloc[:, 0:13])
+
