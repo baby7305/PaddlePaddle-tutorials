@@ -81,3 +81,8 @@ model.fit(train_dataset,
 # 方法二：model.save()保存模型和优化器参数信息
 model.save('mnist_checkpoint/test')
 
+#%%
+
+# 高阶API加载模型
+model.load('mnist_checkpoint/test')
+
