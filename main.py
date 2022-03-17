@@ -69,3 +69,12 @@ model.prepare(
     Accuracy()
     )
 
+#%%
+
+# 训练模型
+model.fit(train_dataset,
+        epochs=2,
+        batch_size=64,
+        verbose=1
+        )
+
