@@ -86,3 +86,30 @@ model.save('mnist_checkpoint/test')
 # 高阶API加载模型
 model.load('mnist_checkpoint/test')
 
+#%%
+
+import paddle
+from paddle.vision.datasets import MNIST
+from paddle.metric import Accuracy
+from paddle.static import InputSpec
+
+train_dataset = MNIST(mode='train', transform=ToTensor())
+test_dataset = MNIST(mode='test', transform=ToTensor())
+
+inputs = InputSpec([None, 784], 'float32', 'inputs')
+labels = InputSpec([None, 10], 'float32', 'labels')
+model = paddle.Model(MyModel(), inputs, labels)
+optim = paddle.optimizer.Adam(learning_rate=0.001, parameters=model.parameters())
+model.load('mnist_checkpoint/final')
+model.prepare( 
+      optim,
+      paddle.nn.loss.CrossEntropyLoss(),
+      Accuracy()
+      )
+model.fit(train_data=train_dataset,
+        eval_data=test_dataset,
+        batch_size=64,
+        epochs=2,
+        verbose=1
+        )
+
