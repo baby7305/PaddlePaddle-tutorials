@@ -12,3 +12,8 @@ warnings.filterwarnings("ignore")
 
 print(paddle.__version__)
 
+#%%
+
+#下载数据
+!wget https://archive.ics.uci.edu/ml/machine-learning-databases/housing/housing.data -O housing.data 
+
