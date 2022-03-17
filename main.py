@@ -77,3 +77,12 @@ housing_features = feature_norm(housing_data[:, :13])
 housing_data = np.c_[housing_features, housing_data[:, -1]].astype(np.float32)
 # print(training_data[0])
 
+#%%
+
+# 归一化后的train_data, 看下各属性的情况
+features_np = np.array([x[:13] for x in housing_data],np.float32)
+labels_np = np.array([x[-1] for x in housing_data],np.float32)
+data_np = np.c_[features_np, labels_np]
+df = pd.DataFrame(data_np, columns=feature_names)
+sns.boxplot(data=df.iloc[:, 0:13])
+
