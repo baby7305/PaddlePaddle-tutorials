@@ -105,3 +105,15 @@ class Regressor(paddle.nn.Layer):
         pred = self.fc(inputs)
         return pred
 
+#%%
+
+train_nums = []
+train_costs = []
+
+def draw_train_process(iters, train_costs):
+    plt.title("training cost", fontsize=24)
+    plt.xlabel("iter", fontsize=14)
+    plt.ylabel("cost", fontsize=14)
+    plt.plot(iters, train_costs, color='red', label='training cost')
+    plt.show()
+
