@@ -108,3 +108,21 @@ def train(model):
 model = LeNet()
 train(model)
 
+#%%
+
+test_loader = paddle.io.DataLoader(test_dataset, places=paddle.CPUPlace(), batch_size=64)
+# 加载测试数据集
+def test(model):
+    model.eval()
+    batch_size = 64
+    for batch_id, data in enumerate(test_loader()):
+        x_data = data[0]
+        y_data = data[1]
+        predicts = model(x_data)
+        # 获取预测结果
+        loss = F.cross_entropy(predicts, y_data)
+        acc = paddle.metric.accuracy(predicts, y_data)
+        if batch_id % 20 == 0:
+            print("batch_id: {}, loss is: {}, acc is: {}".format(batch_id, loss.numpy(), acc.numpy()))
+test(model)
+
