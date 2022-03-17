@@ -201,3 +201,7 @@ def plot_pred_ground(pred, ground):
     plt.plot(ground, ground, c='red')
     plt.show()
 
+#%%
+
+plot_pred_ground(fetch_list, infer_labels_np)
+
