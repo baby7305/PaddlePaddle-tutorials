@@ -86,3 +86,11 @@ data_np = np.c_[features_np, labels_np]
 df = pd.DataFrame(data_np, columns=feature_names)
 sns.boxplot(data=df.iloc[:, 0:13])
 
+#%%
+
+# 将训练数据集和测试数据集按照8:2的比例分开
+ratio = 0.8
+offset = int(housing_data.shape[0] * ratio)
+train_data = housing_data[:offset]
+test_data = housing_data[offset:]
+
