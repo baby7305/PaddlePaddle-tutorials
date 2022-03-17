@@ -76,3 +76,8 @@ model.fit(train_dataset,
         verbose=1
         )
 
+#%%
+
+# 方法二：model.save()保存模型和优化器参数信息
+model.save('mnist_checkpoint/test')
+
