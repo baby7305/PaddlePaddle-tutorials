@@ -58,3 +58,14 @@ features_max = housing_data.max(axis=0)
 features_min = housing_data.min(axis=0)
 features_avg = housing_data.sum(axis=0) / housing_data.shape[0]
 
+#%%
+
+BATCH_SIZE = 20
+def feature_norm(input):
+    f_size = input.shape
+    output_features = np.zeros(f_size, np.float32)
+    for batch_id in range(f_size[0]):
+        for index in range(13):
+            output_features[batch_id][index] = (input[batch_id][index] - features_avg[index]) / (features_max[index] - features_min[index])
+    return output_features 
+
