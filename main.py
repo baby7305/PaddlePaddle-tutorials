@@ -94,3 +94,14 @@ offset = int(housing_data.shape[0] * ratio)
 train_data = housing_data[:offset]
 test_data = housing_data[offset:]
 
+#%%
+
+class Regressor(paddle.nn.Layer):
+    def __init__(self):
+        super(Regressor, self).__init__()
+        self.fc = paddle.nn.Linear(13, 1,)
+
+    def forward(self, inputs):
+        pred = self.fc(inputs)
+        return pred
+
