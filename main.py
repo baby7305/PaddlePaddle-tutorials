@@ -65,3 +65,14 @@ model.fit(train_dataset,
         verbose=1
         )
 
+#%%
+
+# 方法一：训练过程中实时保存每个epoch的模型参数
+model.fit(train_dataset,
+        test_dataset,
+        epochs=2,
+        batch_size=64,
+        save_dir='mnist_checkpoint',
+        verbose=1
+        )
+
