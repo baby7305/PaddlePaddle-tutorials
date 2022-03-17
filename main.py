@@ -39,3 +39,12 @@ matplotlib.use('TkAgg')
 sns.pairplot(df.dropna(), y_vars=feature_names[-1], x_vars=feature_names[::-1], diag_kind='kde')
 plt.show()
 
+#%%
+
+# 相关性分析
+fig, ax = plt.subplots(figsize=(15, 1)) 
+corr_data = df.corr().iloc[-1]
+corr_data = np.asarray(corr_data).reshape(1, 14)
+ax = sns.heatmap(corr_data, cbar=True, annot=True)
+plt.show()
+
