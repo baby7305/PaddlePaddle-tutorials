@@ -161,3 +161,9 @@ def train(model):
 model = Regressor()
 train(model)
 
+#%%
+
+matplotlib.use('TkAgg')
+%matplotlib inline
+draw_train_process(train_nums, train_costs)
+
