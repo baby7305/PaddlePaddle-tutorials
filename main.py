@@ -44,3 +44,24 @@ class MyModel(Layer):
         x = self.linear3(x)
         return x
 
+#%%
+
+inputs = InputSpec([None, 784], 'float32', 'x')
+labels = InputSpec([None, 10], 'float32', 'x')
+model = paddle.Model(MyModel(), inputs, labels)
+
+optim = paddle.optimizer.Adam(learning_rate=0.001, parameters=model.parameters())
+
+model.prepare(
+    optim,
+    paddle.nn.CrossEntropyLoss(),
+    Accuracy()
+    )
+model.fit(train_dataset,
+        test_dataset,
+        epochs=3,
+        batch_size=64,
+        save_dir='mnist_checkpoint',
+        verbose=1
+        )
+
