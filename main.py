@@ -11,3 +11,8 @@ from paddle.vision.transforms import ToTensor
 
 print(paddle.__version__)
 
+#%%
+
+train_dataset = MNIST(mode='train', transform=ToTensor())
+test_dataset = MNIST(mode='test', transform=ToTensor())
+
