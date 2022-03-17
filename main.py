@@ -56,3 +56,16 @@ class LeNet(paddle.nn.Layer):
         x = self.linear3(x)
         return x
 
+#%%
+
+from paddle.metric import Accuracy
+model = paddle.Model(LeNet())   # 用Model封装模型
+optim = paddle.optimizer.Adam(learning_rate=0.001, parameters=model.parameters())
+
+# 配置模型
+model.prepare(
+    optim,
+    paddle.nn.CrossEntropyLoss(),
+    Accuracy()
+    )
+
