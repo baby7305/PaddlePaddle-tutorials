@@ -52,3 +52,9 @@ plt.show()
 
 sns.boxplot(data=df.iloc[:, 0:13])
 
+#%%
+
+features_max = housing_data.max(axis=0)
+features_min = housing_data.min(axis=0)
+features_avg = housing_data.sum(axis=0) / housing_data.shape[0]
+
