@@ -167,3 +167,26 @@ matplotlib.use('TkAgg')
 %matplotlib inline
 draw_train_process(train_nums, train_costs)
 
+#%%
+
+# 获取预测数据
+INFER_BATCH_SIZE = 100
+
+infer_features_np = np.array([data[:13] for data in test_data]).astype("float32")
+infer_labels_np = np.array([data[-1] for data in test_data]).astype("float32")
+
+infer_features = paddle.to_tensor(infer_features_np)
+infer_labels = paddle.to_tensor(infer_labels_np)
+fetch_list = model(infer_features)
+
+sum_cost = 0
+for i in range(INFER_BATCH_SIZE):
+    infer_result = fetch_list[i][0]
+    ground_truth = infer_labels[i]
+    if i % 10 == 0:
+        print("No.%d: infer result is %.2f,ground truth is %.2f" % (i, infer_result, ground_truth))
+    cost = paddle.pow(infer_result - ground_truth, 2)
+    sum_cost += cost
+mean_loss = sum_cost / INFER_BATCH_SIZE
+print("Mean loss is:", mean_loss.numpy())
+
