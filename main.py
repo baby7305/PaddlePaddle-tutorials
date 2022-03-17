@@ -205,3 +205,28 @@ def plot_pred_ground(pred, ground):
 
 plot_pred_ground(fetch_list, infer_labels_np)
 
+#%%
+
+import paddle
+paddle.set_default_dtype("float64")
+
+# step1:用高层API定义数据集，无需进行数据处理等，高层API为你一条龙搞定
+train_dataset = paddle.text.datasets.UCIHousing(mode='train')
+eval_dataset = paddle.text.datasets.UCIHousing(mode='test')
+
+# step2:定义模型
+class UCIHousing(paddle.nn.Layer):
+    def __init__(self):
+        super(UCIHousing, self).__init__()
+        self.fc = paddle.nn.Linear(13, 1, None)
+
+    def forward(self, input):
+        pred = self.fc(input)
+        return pred
+
+# step3:训练模型
+model = paddle.Model(UCIHousing())
+model.prepare(paddle.optimizer.Adam(parameters=model.parameters()),
+              paddle.nn.MSELoss())
+model.fit(train_dataset, eval_dataset, epochs=5, batch_size=8, verbose=1)
+
