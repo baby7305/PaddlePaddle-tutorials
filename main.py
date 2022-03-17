@@ -69,3 +69,11 @@ def feature_norm(input):
             output_features[batch_id][index] = (input[batch_id][index] - features_avg[index]) / (features_max[index] - features_min[index])
     return output_features 
 
+#%%
+
+# 只对属性进行归一化
+housing_features = feature_norm(housing_data[:, :13])
+# print(feature_trian.shape)
+housing_data = np.c_[housing_features, housing_data[:, -1]].astype(np.float32)
+# print(training_data[0])
+
