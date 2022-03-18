@@ -87,3 +87,32 @@ class_idx_to_test_idxs = defaultdict(list)
 for y_test_idx, y in enumerate(y_test):
     class_idx_to_test_idxs[y].append(y_test_idx)
 
+#%%
+
+num_classes = 10
+
+def reader_creator(num_batchs):
+    def reader():
+        iter_step = 0
+        while True:
+            if iter_step >= num_batchs:
+                break
+            iter_step += 1
+            x = np.empty((2, num_classes, 3, height_width, height_width), dtype=np.float32)
+            for class_idx in range(num_classes):
+                examples_for_class = class_idx_to_train_idxs[class_idx]
+                anchor_idx = random.choice(examples_for_class)
+                positive_idx = random.choice(examples_for_class)
+                while positive_idx == anchor_idx:
+                    positive_idx = random.choice(examples_for_class)
+                x[0, class_idx] = x_train[anchor_idx]
+                x[1, class_idx] = x_train[positive_idx]
+            yield x
+
+    return reader
+
+
+# num_batchs: how many batchs to generate
+def anchor_positive_pairs(num_batchs=100):
+    return reader_creator(num_batchs)
+
