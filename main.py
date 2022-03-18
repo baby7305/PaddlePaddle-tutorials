@@ -416,3 +416,8 @@ model.fit(train_dataset,
           batch_size=32,
           verbose=1)
 
+#%%
+
+predict_dataset = PetDataset(mode='predict')
+predict_results = model.predict(predict_dataset)
+
