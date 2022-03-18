@@ -169,3 +169,83 @@ class PetDataset(Dataset):
         """
         return len(self.train_images)
 
+#%%
+
+from paddle.nn import functional as F
+
+class SeparableConv2D(paddle.nn.Layer):
+    def __init__(self, 
+                 in_channels, 
+                 out_channels, 
+                 kernel_size, 
+                 stride=1, 
+                 padding=0, 
+                 dilation=1, 
+                 groups=None, 
+                 weight_attr=None, 
+                 bias_attr=None, 
+                 data_format="NCHW"):
+        super(SeparableConv2D, self).__init__()
+
+        self._padding = padding
+        self._stride = stride
+        self._dilation = dilation
+        self._in_channels = in_channels
+        self._data_format = data_format
+
+        # 第一次卷积参数，没有偏置参数
+        filter_shape = [in_channels, 1] + self.convert_to_list(kernel_size, 2, 'kernel_size')
+        self.weight_conv = self.create_parameter(shape=filter_shape, attr=weight_attr)
+
+        # 第二次卷积参数
+        filter_shape = [out_channels, in_channels] + self.convert_to_list(1, 2, 'kernel_size')
+        self.weight_pointwise = self.create_parameter(shape=filter_shape, attr=weight_attr)
+        self.bias_pointwise = self.create_parameter(shape=[out_channels], 
+                                                    attr=bias_attr, 
+                                                    is_bias=True)
+    
+    def convert_to_list(self, value, n, name, dtype=np.int):
+        if isinstance(value, dtype):
+            return [value, ] * n
+        else:
+            try:
+                value_list = list(value)
+            except TypeError:
+                raise ValueError("The " + name +
+                                "'s type must be list or tuple. Received: " + str(
+                                    value))
+            if len(value_list) != n:
+                raise ValueError("The " + name + "'s length must be " + str(n) +
+                                ". Received: " + str(value))
+            for single_value in value_list:
+                try:
+                    dtype(single_value)
+                except (ValueError, TypeError):
+                    raise ValueError(
+                        "The " + name + "'s type must be a list or tuple of " + str(
+                            n) + " " + str(dtype) + " . Received: " + str(
+                                value) + " "
+                        "including element " + str(single_value) + " of type" + " "
+                        + str(type(single_value)))
+            return value_list
+    
+    def forward(self, inputs):
+        conv_out = F.conv2d(inputs, 
+                            self.weight_conv, 
+                            padding=self._padding,
+                            stride=self._stride,
+                            dilation=self._dilation,
+                            groups=self._in_channels,
+                            data_format=self._data_format)
+        
+        out = F.conv2d(conv_out,
+                       self.weight_pointwise,
+                       bias=self.bias_pointwise,
+                       padding=0,
+                       stride=1,
+                       dilation=1,
+                       groups=1,
+                       data_format=self._data_format)
+
+        return out
+
