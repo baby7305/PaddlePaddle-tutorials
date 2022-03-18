@@ -202,3 +202,14 @@ def train(model):
 model = MyNet()
 train(model)
 
+#%%
+
+near_neighbours_per_example = 10
+
+x_test_t = paddle.to_tensor(x_test)
+test_images_embeddings = model(x_test_t)
+similarities_matrix = paddle.matmul(test_images_embeddings, test_images_embeddings, transpose_y=True) 
+
+indicies = paddle.argsort(similarities_matrix, descending=True)
+indicies = indicies.numpy()
+
