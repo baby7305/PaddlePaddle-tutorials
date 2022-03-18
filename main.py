@@ -49,3 +49,31 @@ y_test = np.squeeze(y_test)
 print(x_test.shape)
 print(y_test.shape)
 
+#%%
+
+height_width = 32
+
+def show_collage(examples):
+    box_size = height_width + 2
+    num_rows, num_cols = examples.shape[:2]
+
+    collage = Image.new(
+        mode="RGB",
+        size=(num_cols * box_size, num_rows * box_size),
+        color=(255, 255, 255),
+    )
+    for row_idx in range(num_rows):
+        for col_idx in range(num_cols):
+            array = (np.array(examples[row_idx, col_idx]) * 255).astype(np.uint8)
+            array = array.transpose(1,2,0)
+            collage.paste(
+                Image.fromarray(array), (col_idx * box_size, row_idx * box_size)
+            )
+
+    collage = collage.resize((2 * num_cols * box_size, 2 * num_rows * box_size))
+    return collage
+
+sample_idxs = np.random.randint(0, 50000, size=(5, 5))
+examples = x_train[sample_idxs]
+show_collage(examples)
+
