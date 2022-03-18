@@ -389,3 +389,10 @@ class PetNet(paddle.nn.Layer):
         y = self.output_conv(y)
         return y
 
+#%%
+
+num_classes = 4
+network = PetNet(num_classes)
+model = paddle.Model(network)
+model.summary((-1, 3,) + IMAGE_SIZE)
+
