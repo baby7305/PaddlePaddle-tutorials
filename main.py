@@ -31,3 +31,21 @@ y_train = np.squeeze(y_train)
 print(x_train.shape)
 print(y_train.shape)
 
+#%%
+
+cifar10_test = paddle.vision.datasets.cifar.Cifar10(mode='test', transform=transform)
+x_test = np.zeros((10000, 3, 32, 32), dtype='float32')
+y_test = np.zeros((10000, 1), dtype='int64')
+
+for i in range(len(cifar10_test)):
+    test_image, test_label = cifar10_test[i]
+   
+    # normalize the data
+    x_test[i,:, :, :] = test_image / 255.
+    y_test[i, 0] = test_label
+
+y_test = np.squeeze(y_test)
+
+print(x_test.shape)
+print(y_test.shape)
+
