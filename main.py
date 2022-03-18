@@ -59,3 +59,61 @@ epoch_num = 10
 batch_size = 32
 learning_rate = 0.001
 
+#%%
+
+val_acc_history = []
+val_loss_history = []
+
+def train(model):
+    print('start training ... ')
+    # turn into training mode
+    model.train()
+
+    opt = paddle.optimizer.Adam(learning_rate=learning_rate,
+                                parameters=model.parameters())
+
+    train_loader = paddle.io.DataLoader(cifar10_train,
+                                        shuffle=True,
+                                        batch_size=batch_size)
+
+    valid_loader = paddle.io.DataLoader(cifar10_test, batch_size=batch_size)
+    
+    for epoch in range(epoch_num):
+        for batch_id, data in enumerate(train_loader()):
+            x_data = data[0]
+            y_data = paddle.to_tensor(data[1])
+            y_data = paddle.unsqueeze(y_data, 1)
+
+            logits = model(x_data)
+            loss = F.cross_entropy(logits, y_data)
+
+            if batch_id % 1000 == 0:
+                print("epoch: {}, batch_id: {}, loss is: {}".format(epoch, batch_id, loss.numpy()))
+            loss.backward()
+            opt.step()
+            opt.clear_grad()
+
+        # evaluate model after one epoch
+        model.eval()
+        accuracies = []
+        losses = []
+        for batch_id, data in enumerate(valid_loader()):
+            x_data = data[0]
+            y_data = paddle.to_tensor(data[1])
+            y_data = paddle.unsqueeze(y_data, 1)
+
+            logits = model(x_data)
+            loss = F.cross_entropy(logits, y_data)
+            acc = paddle.metric.accuracy(logits, y_data)
+            accuracies.append(acc.numpy())
+            losses.append(loss.numpy())
+
+        avg_acc, avg_loss = np.mean(accuracies), np.mean(losses)
+        print("[validation] accuracy/loss: {}/{}".format(avg_acc, avg_loss))
+        val_acc_history.append(avg_acc)
+        val_loss_history.append(avg_loss)
+        model.train()
+
+model = MyNet(num_classes=10)
+train(model)
+
