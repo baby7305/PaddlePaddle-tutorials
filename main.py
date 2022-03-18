@@ -116,3 +116,7 @@ def reader_creator(num_batchs):
 def anchor_positive_pairs(num_batchs=100):
     return reader_creator(num_batchs)
 
+#%%
+
+pairs_train_reader = anchor_positive_pairs(num_batchs=1000)
+
