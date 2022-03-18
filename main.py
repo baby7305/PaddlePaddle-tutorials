@@ -397,6 +397,8 @@ model = paddle.Model(network)
 model.summary((-1, 3,) + IMAGE_SIZE)
 
 #%%
+from PIL import ImageFile        
+ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 train_dataset = PetDataset(mode='train') # 训练数据集
 val_dataset = PetDataset(mode='test') # 验证数据集
