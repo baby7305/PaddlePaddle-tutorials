@@ -163,3 +163,42 @@ class MyNet(paddle.nn.Layer):
         x = x / paddle.norm(x, axis=1, keepdim=True)
         return x
 
+#%%
+
+def train(model):
+    print('start training ... ')
+    model.train()
+
+    inverse_temperature = paddle.to_tensor(np.array([1.0/0.2], dtype='float32'))
+
+    epoch_num = 20
+    
+    opt = paddle.optimizer.Adam(learning_rate=0.0001,
+                                parameters=model.parameters())
+    
+    for epoch in range(epoch_num):
+        for batch_id, data in enumerate(pairs_train_reader()):
+            anchors_data, positives_data = data[0], data[1]
+
+            anchors = paddle.to_tensor(anchors_data)
+            positives = paddle.to_tensor(positives_data)
+            
+            anchor_embeddings = model(anchors)
+            positive_embeddings = model(positives)
+            
+            similarities = paddle.matmul(anchor_embeddings, positive_embeddings, transpose_y=True) 
+            similarities = paddle.multiply(similarities, inverse_temperature)
+            
+            sparse_labels = paddle.arange(0, num_classes, dtype='int64')
+
+            loss = F.cross_entropy(similarities, sparse_labels)
+            
+            if batch_id % 500 == 0:
+                print("epoch: {}, batch_id: {}, loss is: {}".format(epoch, batch_id, loss.numpy()))
+            loss.backward()
+            opt.step()
+            opt.clear_grad()
+
+model = MyNet()
+train(model)
+
