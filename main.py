@@ -421,3 +421,48 @@ model.fit(train_dataset,
 predict_dataset = PetDataset(mode='predict')
 predict_results = model.predict(predict_dataset)
 
+#%%
+
+plt.figure(figsize=(10, 10))
+
+i = 0
+mask_idx = 0
+
+with open('./predict.txt', 'r') as f:
+    for line in f.readlines():
+        image_path, label_path = line.strip().split('\t')
+        resize_t = T.Compose([
+            T.Resize(IMAGE_SIZE)
+        ])
+        image = resize_t(PilImage.open(image_path))
+        label = resize_t(PilImage.open(label_path))
+
+        image = np.array(image).astype('uint8')
+        label = np.array(label).astype('uint8')
+
+        if i > 8: 
+            break
+        plt.subplot(3, 3, i + 1)
+        plt.imshow(image)
+        plt.title('Input Image')
+        plt.axis("off")
+
+        plt.subplot(3, 3, i + 2)
+        plt.imshow(label, cmap='gray')
+        plt.title('Label')
+        plt.axis("off")
+        
+        # 模型只有一个输出，所以通过predict_results[0]来取出1000个预测的结果
+        # 映射原始图片的index来取出预测结果，提取mask进行展示
+        data = predict_results[0][mask_idx][0].transpose((1, 2, 0))
+        mask = np.argmax(data, axis=-1)
+
+        plt.subplot(3, 3, i + 3)
+        plt.imshow(mask.astype('uint8'), cmap='gray')
+        plt.title('Predict')
+        plt.axis("off")
+        i += 3
+        mask_idx += 1
+
+plt.show()
+
