@@ -77,3 +77,13 @@ sample_idxs = np.random.randint(0, 50000, size=(5, 5))
 examples = x_train[sample_idxs]
 show_collage(examples)
 
+#%%
+
+class_idx_to_train_idxs = defaultdict(list)
+for y_train_idx, y in enumerate(y_train):
+    class_idx_to_train_idxs[y].append(y_train_idx)
+
+class_idx_to_test_idxs = defaultdict(list)
+for y_test_idx, y in enumerate(y_test):
+    class_idx_to_test_idxs[y].append(y_test_idx)
+
