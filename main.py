@@ -8,3 +8,11 @@ import matplotlib.pyplot as plt
 
 print(paddle.__version__)
 
+#%%
+
+transform = ToTensor()
+cifar10_train = paddle.vision.datasets.Cifar10(mode='train',
+                                               transform=transform)
+cifar10_test = paddle.vision.datasets.Cifar10(mode='test',
+                                              transform=transform)
+
