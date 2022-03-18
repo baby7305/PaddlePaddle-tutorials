@@ -120,3 +120,9 @@ def anchor_positive_pairs(num_batchs=100):
 
 pairs_train_reader = anchor_positive_pairs(num_batchs=1000)
 
+#%%
+
+examples = next(pairs_train_reader())
+print(examples.shape)
+show_collage(examples)
+
