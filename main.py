@@ -213,3 +213,27 @@ similarities_matrix = paddle.matmul(test_images_embeddings, test_images_embeddin
 indicies = paddle.argsort(similarities_matrix, descending=True)
 indicies = indicies.numpy()
 
+#%%
+
+examples = np.empty(
+    (
+        num_classes,
+        near_neighbours_per_example + 1,
+        3,
+        height_width,
+        height_width,
+    ),
+    dtype=np.float32,
+)
+
+for row_idx in range(num_classes):
+    examples_for_class = class_idx_to_test_idxs[row_idx]
+    anchor_idx = random.choice(examples_for_class)
+    
+    examples[row_idx, 0] = x_test[anchor_idx]
+    anchor_near_neighbours = indicies[anchor_idx][1:near_neighbours_per_example+1]
+    for col_idx, nn_idx in enumerate(anchor_near_neighbours):
+        examples[row_idx, col_idx + 1] = x_test[nn_idx]
+
+show_collage(examples)
+
