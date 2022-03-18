@@ -53,3 +53,9 @@ class MyNet(paddle.nn.Layer):
         x = self.linear2(x)
         return x
 
+#%%
+
+epoch_num = 10
+batch_size = 32
+learning_rate = 0.001
+
