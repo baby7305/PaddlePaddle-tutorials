@@ -396,3 +396,21 @@ network = PetNet(num_classes)
 model = paddle.Model(network)
 model.summary((-1, 3,) + IMAGE_SIZE)
 
+#%%
+
+train_dataset = PetDataset(mode='train') # 训练数据集
+val_dataset = PetDataset(mode='test') # 验证数据集
+
+optim = paddle.optimizer.RMSProp(learning_rate=0.001, 
+                                 rho=0.9, 
+                                 momentum=0.0, 
+                                 epsilon=1e-07, 
+                                 centered=False,
+                                 parameters=model.parameters())
+model.prepare(optim, paddle.nn.CrossEntropyLoss(axis=1))
+model.fit(train_dataset, 
+          val_dataset, 
+          epochs=15, 
+          batch_size=32,
+          verbose=1)
+
