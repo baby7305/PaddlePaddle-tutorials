@@ -117,3 +117,12 @@ def train(model):
 model = MyNet(num_classes=10)
 train(model)
 
+#%%
+
+plt.plot(val_acc_history, label = 'validation accuracy')
+
+plt.xlabel('Epoch')
+plt.ylabel('Accuracy')
+plt.ylim([0.5, 0.8])
+plt.legend(loc='lower right')
+
