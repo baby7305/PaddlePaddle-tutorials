@@ -189,3 +189,15 @@ optimizer = paddle.optimizer.Adam(learning_rate=0.0001, parameters=model.paramet
 model.prepare(optimizer=optimizer,
                 loss=CTCLoss())
 
+#%%
+
+# 执行训练
+model.fit(train_data=Reader(DATA_PATH),
+            eval_data=Reader(DATA_PATH, is_val=True),
+            batch_size=BATCH_SIZE,
+            epochs=EPOCH,
+            save_dir="output/",
+            save_freq=1,
+            verbose=1,
+            drop_last=True)
+
