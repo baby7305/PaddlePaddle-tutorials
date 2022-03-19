@@ -239,3 +239,12 @@ class InferReader(Dataset):
     def __len__(self):
         return len(self.img_paths)
 
+#%%
+
+# 待预测目录 - 可在测试数据集中挑出\b3张图像放在该目录中进行推理
+INFER_DATA_PATH = "./sample_img"
+# 训练后存档点路径 - final 代表最终训练所得模型
+CHECKPOINT_PATH = "./output/final.pdparams"
+# 每批次处理数量
+BATCH_SIZE = 32
+
