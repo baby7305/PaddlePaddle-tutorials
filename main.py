@@ -144,3 +144,16 @@ class Net(paddle.nn.Layer):
             x = paddle.argmax(x, axis=-1)
         return x
 
+#%%
+
+# 数据集路径设置
+DATA_PATH = "./data/OCR_Dataset"
+# 训练轮数
+EPOCH = 10
+# 每批次数据大小
+BATCH_SIZE = 16
+
+label_define = paddle.static.InputSpec(shape=[-1, LABEL_MAX_LEN],
+                                    dtype="int32",
+                                    name="label")
+
