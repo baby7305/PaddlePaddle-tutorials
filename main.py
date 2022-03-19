@@ -175,3 +175,8 @@ class CTCLoss(paddle.nn.Layer):
         loss = paddle.nn.functional.ctc_loss(ipt, label, input_lengths, label_lengths, blank=10)
         return loss
 
+#%%
+
+# 实例化模型
+model = paddle.Model(Net(), inputs=input_define, labels=label_define)
+
