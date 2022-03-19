@@ -157,3 +157,21 @@ label_define = paddle.static.InputSpec(shape=[-1, LABEL_MAX_LEN],
                                     dtype="int32",
                                     name="label")
 
+#%%
+
+class CTCLoss(paddle.nn.Layer):
+    def __init__(self):
+        """
+        定义CTCLoss
+        """
+        super().__init__()
+
+    def forward(self, ipt, label):
+        input_lengths = paddle.full(shape=[BATCH_SIZE],fill_value=LABEL_MAX_LEN + 4,dtype= "int64")
+        label_lengths = paddle.full(shape=[BATCH_SIZE],fill_value=LABEL_MAX_LEN,dtype= "int64")
+        # 按文档要求进行转换dim顺序
+        ipt = paddle.tensor.transpose(ipt, [1, 0, 2])
+        # 计算loss
+        loss = paddle.nn.functional.ctc_loss(ipt, label, input_lengths, label_lengths, blank=10)
+        return loss
+
