@@ -180,3 +180,12 @@ class CTCLoss(paddle.nn.Layer):
 # 实例化模型
 model = paddle.Model(Net(), inputs=input_define, labels=label_define)
 
+#%%
+
+# 定义优化器
+optimizer = paddle.optimizer.Adam(learning_rate=0.0001, parameters=model.parameters())
+
+# 为模型配置运行环境并设置该优化策略
+model.prepare(optimizer=optimizer,
+                loss=CTCLoss())
+
