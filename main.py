@@ -248,3 +248,18 @@ CHECKPOINT_PATH = "./output/final.pdparams"
 # 每批次处理数量
 BATCH_SIZE = 32
 
+#%%
+
+import matplotlib.pyplot as plt
+plt.figure(figsize=(10, 10))
+sample_idxs = np.random.choice(50000, size=25, replace=False)
+
+for img_id, img_name in enumerate(os.listdir(INFER_DATA_PATH)):
+    plt.subplot(1, 3, img_id + 1)
+    plt.xticks([])
+    plt.yticks([])
+    im = Image.open(os.path.join(INFER_DATA_PATH, img_name))
+    plt.imshow(im, cmap=plt.cm.binary)
+    plt.xlabel("Img name: " + img_name)
+plt.show()
+
